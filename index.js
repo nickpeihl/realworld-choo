@@ -27,8 +27,8 @@ app.use(function (state, emitter) {
       active: false
     },
     {
-      name: 'Settings',
-      href: '',
+      name: 'Sign in',
+      href: '/login',
       active: false
     },
     {
@@ -44,7 +44,10 @@ app.use(require('./models/articles'))
 app.use(require('./models/article'))
 app.use(require('./models/comments'))
 app.use(require('./models/profile'))
+app.use(require('./models/auth'))
+
 app.route('/', layout(require('./views/home')))
+app.route('/login', layout(require('./views/login')))
 app.route('/article/:slug', layout(require('./views/article')))
 app.route('/profile/:username', layout(require('./views/profile')))
 app.route('/*', require('./views/404'))
