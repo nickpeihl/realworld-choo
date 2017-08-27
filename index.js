@@ -1,7 +1,6 @@
-var css = require('sheetify')
 var choo = require('choo')
 
-css('tachyons')
+var layout = require('./views/layout')
 
 var app = choo()
 if (process.env.NODE_ENV !== 'production') {
@@ -10,7 +9,44 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.use(require('choo-service-worker')())
 
-app.route('/', require('./views/main'))
+app.use(function (state, emitter) {
+  state.title = 'Conduit'
+  state.banner = {
+    titleClass: 'logo-font',
+    title: 'conduit'
+  }
+  state.navs = [
+    {
+      name: 'Home',
+      href: '/',
+      active: true
+    },
+    {
+      name: 'New Post',
+      href: '',
+      active: false
+    },
+    {
+      name: 'Settings',
+      href: '',
+      active: false
+    },
+    {
+      name: 'Sign up',
+      href: '',
+      active: false
+    }
+  ]
+})
+
+app.use(require('./models/tags'))
+app.use(require('./models/articles'))
+app.use(require('./models/article'))
+app.use(require('./models/comments'))
+app.use(require('./models/profile'))
+app.route('/', layout(require('./views/home')))
+app.route('/article/:slug', layout(require('./views/article')))
+app.route('/profile/:username', layout(require('./views/profile')))
 app.route('/*', require('./views/404'))
 
 if (!module.parent) app.mount('body')
