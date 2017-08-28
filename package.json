@@ -3,22 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "bankai build index.js",
-    "inspect": "bankai inspect index.js",
-    "start": "budo index.js:bundle.js",
+    "start": "budo index.js:bundle.js --port 3000",
     "test": "standard && test-deps",
     "test-deps": "dependency-check . && dependency-check . --extra --no-dev"
   },
   "dependencies": {
-    "choo": "^6.0.0-4",
+    "choo": "^6.0.0",
     "choo-devtools": "^1.3.1",
-    "choo-log": "^7.0.1",
-    "choo-service-worker": "^2.1.5",
+    "choo-log": "^7.2.1",
+    "choo-service-worker": "^2.2.0",
     "form-serialize": "^0.7.2",
     "xhr": "^2.4.0"
   },
   "devDependencies": {
-    "bankai": "^5.0.0-1",
+    "budo": "^10.0.4",
     "standard": "^10.0.2"
   }
 }
