@@ -43,7 +43,7 @@ function AuthModel (state, emitter) {
           emitter.emit('log:error', `Login API returned ${res.statusCode}`)
         } else {
           state.auth.authenticated = true
-          emitter.emit('render')
+          emitter.emit('pushState', '/')
         }
       }
     )

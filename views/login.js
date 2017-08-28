@@ -6,7 +6,16 @@ var listErrors = require('../components/list-errors')
 module.exports = login
 
 function login (state, emit) {
-  return html`
+  var checkingAuth = state.auth.checkingAuth
+  var authenticated = state.auth.authenticated
+  if (checkingAuth) {
+    if (authenticated) {
+      emit('go', '/')
+    } else {
+      return html`<div></div>`
+    }
+  } else {
+    return html`
 <div class="auth-page">
   <div class="container-page">
     <div class="row">
@@ -42,6 +51,7 @@ function login (state, emit) {
   </div>
 </div>
   `
+  }
 
   function submitForm (e) {
     e.preventDefault()

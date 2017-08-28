@@ -6,18 +6,12 @@ module.exports = layout
 
 function layout (page) {
   return function (state, emit) {
-    var checkingAuth = state.auth.checkingAuth
-
-    if (checkingAuth) {
-      return html`<div></div>`
-    } else {
-      return html`
-        <body class="sans-serif">
-          ${header(state.navs, emit)}
-          ${page(state, emit)}
-          ${footer(state, emit)}
-        </body>
-      `
-    }
+    return html`
+      <body class="sans-serif">
+        ${header(state.navs, emit)}
+        ${page(state, emit)}
+        ${footer(state, emit)}
+      </body>
+    `
   }
 }
