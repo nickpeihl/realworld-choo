@@ -27,9 +27,7 @@ function container (state) {
       <div class="col-md-9">
         <div class="feed-toggle">
           <ul class="nav nav-pills outline-active">
-            <li class="nav-item">
-              <a class="nav-link disabled" href="">Your Feed</a>
-            </li>
+            ${yourFeedTab(state.auth.authenticated)}
             <li class="nav-item">
               <a class="nav-link active" href="">Global Feed</a>
             </li>
@@ -54,6 +52,18 @@ function sidebarDiv (tags) {
       </div>
     </div>
   `
+}
+
+function yourFeedTab (authenticated) {
+  if (authenticated) {
+    return html`
+      <li class="nav-item">
+        <a class="nav-link" href="">Your Feed</a>
+      </li>
+    `
+  } else {
+    return null
+  }
 }
 
 function tagLink (tag) {
