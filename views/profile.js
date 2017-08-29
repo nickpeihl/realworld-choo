@@ -30,8 +30,8 @@ function profile (state, emit) {
             </li>
           </ul>
         </div>
+        ${state.articles.map(articlePreview)}
       </div>
-      ${state.articles.map(articlePreview)}
     </div>
   </div>
 </div>
