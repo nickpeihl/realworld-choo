@@ -56,7 +56,9 @@ function login (state, emit) {
   function submitForm (e) {
     e.preventDefault()
     var form = e.target
-    var data = serialize(form)
-    emit('auth:login', { user: data })
+    var data = serialize(form, {
+      hash: true
+    })
+    emit('auth:login', data)
   }
 }
