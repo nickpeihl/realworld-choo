@@ -8,7 +8,8 @@ function AuthModel (state, emitter) {
   state.auth = {
     checkingAuth: false,
     authenticated: false,
-    errors: null
+    errors: null,
+    token: window.localStorage.getItem('jwt') || null
   }
 
   emitter.on('DOMContentLoaded', function () {
@@ -43,6 +44,7 @@ function AuthModel (state, emitter) {
           emitter.emit('log:error', `Login API returned ${res.statusCode}`)
         } else {
           state.auth.authenticated = true
+          window.localStorage.setItem('jwt', res.body.user.token)
           emitter.emit('pushState', '/')
         }
       }
