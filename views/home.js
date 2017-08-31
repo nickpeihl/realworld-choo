@@ -8,15 +8,9 @@ module.exports = home
 function home (state, emit) {
   return html`
     <div class="home-page">
-      ${banner(state.banner, bannerContent())}
+      ${banner(state.banner)}
       ${container(state)}
     </div>
-  `
-}
-
-function bannerContent () {
-  return html`
-    <p>A place to share your knowledge</p>
   `
 }
 
