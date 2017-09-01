@@ -4,12 +4,12 @@ module.exports = Sidebar
 
 function Sidebar (tags) {
   return html`
-    <div class="sidebar">
+    <aside class="sidebar">
       <p>Popular Tags</p>
       <div class="tag-list">
         ${tags.map(tagLink)}
       </div>
-    </div>
+    </aside>
   `
 }
 
