@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "budo index.js:bundle.js --port 3000",
-    "test": "standard && test-deps",
+    "test": "tape test/**/*.js",
     "test-deps": "dependency-check . && dependency-check . --extra --no-dev"
   },
   "dependencies": {
@@ -19,7 +19,9 @@
   },
   "devDependencies": {
     "budo": "^10.0.4",
+    "run-parallel": "^1.1.6",
     "standard": "^10.0.2",
-    "tape": "^4.8.0"
+    "tape": "^4.8.0",
+    "tape-cluster": "^2.1.2"
   }
 }
