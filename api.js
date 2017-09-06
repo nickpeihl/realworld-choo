@@ -82,7 +82,7 @@ RealWorld.prototype.login = function (opts, cb) {
       cb
     )
   } else {
-    cb('Must supply username and password')
+    cb(new Error('Must supply username and password'))
   }
 }
 
@@ -104,7 +104,7 @@ RealWorld.prototype.register = function (opts, cb) {
       cb
     )
   } else {
-    cb('Must supply a username, email, and password')
+    cb(new Error('Must supply a username, email, and password'))
   }
 }
 
@@ -151,7 +151,7 @@ RealWorld.prototype.listArticlesByTag = function (tag, page, cb) {
     cb = page
     page = null
   }
-  this._getRequest(`/articles?tag=${encode(tag)}&${limit(10, page)}`)
+  this._getRequest(`/articles?tag=${encode(tag)}&${limit(10, page)}`, cb)
 }
 
 RealWorld.prototype.listArticlesByAuthor = function (author, page, cb) {
@@ -159,7 +159,7 @@ RealWorld.prototype.listArticlesByAuthor = function (author, page, cb) {
     cb = page
     page = null
   }
-  this._getRequest(`/articles?author=${encode(author)}&${limit(5, page)}`)
+  this._getRequest(`/articles?author=${encode(author)}&${limit(5, page)}`, cb)
 }
 
 RealWorld.prototype.listArticlesByAuthorFavorites = function (author, page, cb) {
@@ -167,7 +167,10 @@ RealWorld.prototype.listArticlesByAuthorFavorites = function (author, page, cb) 
     cb = page
     page = null
   }
-  this._getRequest(`/articles?favorited=${encode(author)}&${limit(20, page)}`)
+  this._getRequest(
+    `/articles?favorited=${encode(author)}&${limit(20, page)}`,
+    cb
+  )
 }
 
 RealWorld.prototype.feedArticles = function (page, cb) {
