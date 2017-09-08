@@ -4,7 +4,7 @@ module.exports = articlePreview
 
 function articlePreview (article) {
   return html`
-    <div class="article-preview">
+    <div id="article-${article.slug}" class="article-preview">
       <div class="article-meta">
         <a href=""><img src="${article.author.image}" /></a>
         <div class="info">
