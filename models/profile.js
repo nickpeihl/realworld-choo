@@ -1,10 +1,7 @@
-var xhr = require('xhr')
-
-var API_BASE = require('../api').base
-
 module.exports = ProfileModel
 
 function ProfileModel (state, emitter) {
+  var client = state.client
   state.profile = null
 
   emitter.on('DOMContentLoaded', function () {
@@ -12,7 +9,7 @@ function ProfileModel (state, emitter) {
   })
 
   function getProfile (username) {
-    xhr.get(API_BASE + '/profiles/' + username, function (err, res) {
+    client.getProfile(username, function (err, res) {
       if (err) emitter.emit('log:error', 'Error fetching profile: `err`')
       else if (res.statusCode !== 200) {
         emitter.emit('log:error', `Profile API returned ${res.statusCode}`)

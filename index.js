@@ -1,4 +1,5 @@
 var choo = require('choo')
+var API = require('./api')
 
 var layout = require('./views/layout')
 
@@ -11,6 +12,7 @@ app.use(require('choo-service-worker')())
 
 app.use(function (state, emitter) {
   state.title = 'Conduit'
+  state.client = new API()
   state.banner = {
     titleClass: 'logo-font',
     title: 'conduit'

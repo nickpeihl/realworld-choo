@@ -1,11 +1,9 @@
-var xhr = require('xhr')
 var xtend = require('xtend')
-
-var API_BASE = require('../api').base
 
 module.exports = TagsModel
 
 function TagsModel (state, emitter) {
+  var client = state.client
   state.tags = xtend(
     {
       ready: false,
@@ -18,12 +16,10 @@ function TagsModel (state, emitter) {
 
   function getTags () {
     state.tags.ready = false
-    xhr.get(API_BASE + '/tags', function (err, res) {
+    client.getTags(function (err, res) {
       if (err) emitter.emit('log:error', 'Error fetching tags: `err`')
-      else if (res.statusCode !== 200) {
-        emitter.emit('log:error', 'Tags API returned `res.statusCode`')
-      } else {
-        state.tags.values = JSON.parse(res.body).tags
+      else {
+        state.tags.values = res.tags
         state.tags.ready = true
         emitter.emit('render')
       }
