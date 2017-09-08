@@ -15,20 +15,49 @@ TestCluster.test(
     port: port
   },
   function (cluster, t) {
-    parallel(tests, function (err, res) {
+    parallel(getTests, function (err, res) {
       t.error(err, 'no errors in get tests')
       Object.keys(res).forEach(function (key) {
         t.equal(res[key].method, 'GET', `${key} method is GET`)
-        t.equal(res[key].url, expected[key].url, `${key} sends correct URL`)
+        t.equal(
+          res[key].url,
+          getExpected[key].url,
+          `${key} requests correct URL`
+        )
       })
       t.end()
     })
   }
 )
 
-var expected = {
+TestCluster.test(
+  'post methods',
+  {
+    port: port
+  },
+  function (cluster, t) {
+    client.setToken('beepboop')
+    parallel(postTests, function (err, res) {
+      t.error(err)
+      Object.keys(res).forEach(function (key) {
+        t.equal(res[key].method, 'POST', `${key} method is POST`)
+        t.equal(
+          res[key].url,
+          postExpected[key].url,
+          `${key} requests correct URL`
+        )
+      })
+      t.end()
+    })
+  }
+)
+
+var getExpected = {
+  'get-user': {
+    url: '/api/user'
+  },
   'get-profile': {
-    url: '/api/profiles/nickpeihl'
+    url: '/api/profiles/foobar'
   },
   'get-article': {
     url: '/api/articles/fizzbuzz'
@@ -71,9 +100,12 @@ var expected = {
   }
 }
 
-var tests = {
+var getTests = {
+  'get-user': function (cb) {
+    client.getUser(cb)
+  },
   'get-profile': function (cb) {
-    client.getProfile('nickpeihl', cb)
+    client.getProfile('foobar', cb)
   },
   'get-article': function (cb) {
     client.getArticle('fizzbuzz', cb)
@@ -115,3 +147,7 @@ var tests = {
     client.feedArticles(10, cb)
   }
 }
+
+var postExpected = {}
+
+var postTests = {}
