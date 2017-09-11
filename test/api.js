@@ -57,6 +57,33 @@ TestCluster.test(
   }
 )
 
+TestCluster.test(
+  'put methods',
+  {
+    port: port
+  },
+  function (cluster, t) {
+    client.setToken('beepboop')
+    parallel(putTests, function (err, res) {
+      t.error(err)
+      Object.keys(res).forEach(function (key) {
+        t.equal(res[key].method, 'PUT', `${key} method is PUT`)
+        t.equal(
+          res[key].url,
+          putExpected[key].url,
+          `${key} requests correct URL`
+        )
+        t.deepEqual(
+          res[key].body,
+          putExpected[key].body,
+          `${key} returns correct body`
+        )
+      })
+      t.end()
+    })
+  }
+)
+
 var getExpected = {
   'get-user': {
     url: '/api/user'
@@ -247,5 +274,50 @@ var postTests = {
   },
   'favorite-article': function (cb) {
     client.favoriteArticle('fizzbuzz', cb)
+  }
+}
+
+var putExpected = {
+  'update-user': {
+    url: '/api/user',
+    body: {
+      user: {
+        email: 'bizz@fuzz.com',
+        bio: 'Hello world',
+        image: 'https://example.com/profile.jpg'
+      }
+    }
+  },
+  'update-article': {
+    url: '/api/articles/fozzbazz',
+    body: {
+      article: {
+        title: 'Fozz Bazz',
+        body: 'Hola mundo'
+      }
+    }
+  }
+}
+
+var putTests = {
+  'update-user': function (cb) {
+    client.updateUser(
+      {
+        email: 'bizz@fuzz.com',
+        bio: 'Hello world',
+        image: 'https://example.com/profile.jpg'
+      },
+      cb
+    )
+  },
+  'update-article': function (cb) {
+    client.updateArticle(
+      'fozzbazz',
+      {
+        title: 'Fozz Bazz',
+        body: 'Hola mundo'
+      },
+      cb
+    )
   }
 }

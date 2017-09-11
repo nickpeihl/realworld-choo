@@ -118,7 +118,7 @@ RealWorld.prototype.updateUser = function (opts, cb) {
     opts = {}
   }
   this._putRequest(
-    `user`,
+    `/user`,
     {
       user: opts
     },
