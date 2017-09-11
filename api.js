@@ -131,7 +131,7 @@ RealWorld.prototype.getProfile = function (username, cb) {
 }
 
 RealWorld.prototype.followUser = function (username, cb) {
-  this._postRequest(`/profiles/${username}/follow`, cb)
+  this._postRequest(`/profiles/${username}/follow`, {}, cb)
 }
 
 RealWorld.prototype.unFollowUser = function (username, cb) {
@@ -240,7 +240,7 @@ RealWorld.prototype.deleteComment = function (slug, commentId, cb) {
 }
 
 RealWorld.prototype.favoriteArticle = function (slug, cb) {
-  this._postRequest(`/articles/${slug}/favorite`, cb)
+  this._postRequest(`/articles/${slug}/favorite`, {}, cb)
 }
 
 RealWorld.prototype.unFavoriteArticle = function (slug, cb) {

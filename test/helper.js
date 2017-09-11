@@ -1,5 +1,6 @@
 var http = require('http')
 var test = require('tape')
+var xtend = require('xtend')
 var tapeCluster = require('tape-cluster')
 
 RealWorldTestCluster.test = tapeCluster(test, RealWorldTestCluster)
@@ -20,12 +21,28 @@ function RealWorldTestCluster (opts) {
   self.server.on('request', onRequest)
 
   function onRequest (req, res) {
-    var data = JSON.stringify({
+    var data = {
       url: req.url,
       method: req.method,
       headers: req.headers
-    })
-    res.end(data)
+    }
+    var reqBody = []
+    req
+      .on('data', function (chunk) {
+        reqBody.push(chunk)
+      })
+      .on('end', function () {
+        reqBody = Buffer.concat(reqBody).toString()
+        if (reqBody && typeof reqBody === 'string') {
+          data = xtend(
+            {
+              body: JSON.parse(reqBody)
+            },
+            data
+          )
+        }
+        res.end(JSON.stringify(data))
+      })
   }
 }
 

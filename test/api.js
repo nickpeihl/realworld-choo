@@ -46,6 +46,11 @@ TestCluster.test(
           postExpected[key].url,
           `${key} requests correct URL`
         )
+        t.deepEqual(
+          res[key].body,
+          postExpected[key].body,
+          `${key} returns correct body`
+        )
       })
       t.end()
     })
@@ -148,6 +153,99 @@ var getTests = {
   }
 }
 
-var postExpected = {}
+var postExpected = {
+  'login-good': {
+    url: '/api/users/login',
+    body: {
+      user: {
+        email: 'foo',
+        password: 'bar'
+      }
+    }
+  },
+  'register-good': {
+    url: '/api/users',
+    body: {
+      user: {
+        username: 'fizz',
+        password: 'buzz',
+        email: 'beep@boop.com'
+      }
+    }
+  },
+  'follow-user': {
+    url: '/api/profiles/buzz/follow',
+    body: {}
+  },
+  'create-article': {
+    url: '/api/articles',
+    body: {
+      article: {
+        title: 'FooBar',
+        description: 'beep boop',
+        body: 'Hello world',
+        tagList: ['fizz', 'buzz']
+      }
+    }
+  },
+  'add-comment': {
+    url: '/api/articles/foobar/comments',
+    body: {
+      comment: {
+        body: 'bizzle bazzle'
+      }
+    }
+  },
+  'favorite-article': {
+    url: '/api/articles/fizzbuzz/favorite',
+    body: {}
+  }
+}
 
-var postTests = {}
+var postTests = {
+  'login-good': function (cb) {
+    client.login(
+      {
+        user: 'foo',
+        password: 'bar'
+      },
+      cb
+    )
+  },
+  'register-good': function (cb) {
+    client.register(
+      {
+        username: 'fizz',
+        password: 'buzz',
+        email: 'beep@boop.com'
+      },
+      cb
+    )
+  },
+  'follow-user': function (cb) {
+    client.followUser('buzz', cb)
+  },
+  'create-article': function (cb) {
+    client.createArticle(
+      {
+        title: 'FooBar',
+        description: 'beep boop',
+        body: 'Hello world',
+        tagList: ['fizz', 'buzz']
+      },
+      cb
+    )
+  },
+  'add-comment': function (cb) {
+    client.addComment(
+      'foobar',
+      {
+        body: 'bizzle bazzle'
+      },
+      cb
+    )
+  },
+  'favorite-article': function (cb) {
+    client.favoriteArticle('fizzbuzz', cb)
+  }
+}
