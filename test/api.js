@@ -84,6 +84,27 @@ TestCluster.test(
   }
 )
 
+TestCluster.test(
+  'del methods',
+  {
+    port: port
+  },
+  function (cluster, t) {
+    parallel(delTests, function (err, res) {
+      t.error(err, 'no errors in del tests')
+      Object.keys(res).forEach(function (key) {
+        t.equal(res[key].method, 'DELETE', `${key} method is DELETE`)
+        t.equal(
+          res[key].url,
+          delExpected[key].url,
+          `${key} requests correct URL`
+        )
+      })
+      t.end()
+    })
+  }
+)
+
 var getExpected = {
   'get-user': {
     url: '/api/user'
@@ -319,5 +340,35 @@ var putTests = {
       },
       cb
     )
+  }
+}
+
+var delExpected = {
+  'unfollow-user': {
+    url: '/api/profiles/FizzBuzz/follow'
+  },
+  'delete-article': {
+    url: '/api/articles/FooBar'
+  },
+  'delete-comment': {
+    url: '/api/articles/BeepBoop/comments/173'
+  },
+  'unfavorite-article': {
+    url: '/api/articles/BizzBamm/favorite'
+  }
+}
+
+var delTests = {
+  'unfollow-user': function (cb) {
+    client.unFollowUser('FizzBuzz', cb)
+  },
+  'delete-article': function (cb) {
+    client.deleteArticle('FooBar', cb)
+  },
+  'delete-comment': function (cb) {
+    client.deleteComment('BeepBoop', 173, cb)
+  },
+  'unfavorite-article': function (cb) {
+    client.unFavoriteArticle('BizzBamm', cb)
   }
 }
