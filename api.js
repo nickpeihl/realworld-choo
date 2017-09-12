@@ -13,12 +13,21 @@ function RealWorld (opts) {
 }
 
 var defaults = {
-  json: true,
-  token: this.token ? `authorization: Token ${this.token}` : null
+  json: true
 }
 
 var limit = function (count, p) {
   return `limit=${count}&offset=${p ? p * count : 0}`
+}
+
+RealWorld.prototype._useToken = function () {
+  if (this.token) {
+    return xtend(defaults, {
+      headers: {
+        Authorization: `Token ${this.token}`
+      }
+    })
+  }
 }
 
 var encode = encodeURIComponent
@@ -26,7 +35,7 @@ var encode = encodeURIComponent
 RealWorld.prototype._getRequest = function (url, cb) {
   request(
     `${this.apiRoot}${url}`,
-    xtend(defaults, {
+    xtend(defaults, this._useToken(), {
       method: 'GET'
     }),
     cb
@@ -36,7 +45,7 @@ RealWorld.prototype._getRequest = function (url, cb) {
 RealWorld.prototype._postRequest = function (url, body, cb) {
   request(
     `${this.apiRoot}${url}`,
-    xtend(defaults, {
+    xtend(defaults, this._useToken(), {
       method: 'POST',
       body: body
     }),
@@ -47,7 +56,7 @@ RealWorld.prototype._postRequest = function (url, body, cb) {
 RealWorld.prototype._putRequest = function (url, body, cb) {
   request(
     `${this.apiRoot}${url}`,
-    xtend(defaults, {
+    xtend(defaults, this._useToken(), {
       method: 'PUT',
       body: body
     }),
@@ -58,7 +67,7 @@ RealWorld.prototype._putRequest = function (url, body, cb) {
 RealWorld.prototype._delRequest = function (url, cb) {
   request(
     `${this.apiRoot}${url}`,
-    xtend(defaults, {
+    xtend(defaults, this._useToken(), {
       method: 'DELETE'
     }),
     cb

@@ -24,6 +24,10 @@ TestCluster.test(
           getExpected[key].url,
           `${key} requests correct URL`
         )
+        t.notOk(
+          res[key].headers.authorization,
+          `${key} no authorization in header`
+        )
       })
       t.end()
     })
@@ -51,6 +55,11 @@ TestCluster.test(
           postExpected[key].body,
           `${key} returns correct body`
         )
+        t.equal(
+          res[key].headers.authorization,
+          'Token beepboop',
+          `${key} token submitted in header`
+        )
       })
       t.end()
     })
@@ -63,7 +72,7 @@ TestCluster.test(
     port: port
   },
   function (cluster, t) {
-    client.setToken('beepboop')
+    client.setToken('blipblap')
     parallel(putTests, function (err, res) {
       t.error(err)
       Object.keys(res).forEach(function (key) {
@@ -78,6 +87,11 @@ TestCluster.test(
           putExpected[key].body,
           `${key} returns correct body`
         )
+        t.equal(
+          res[key].headers.authorization,
+          'Token blipblap',
+          `${key} token submitted in header`
+        )
       })
       t.end()
     })
@@ -90,6 +104,7 @@ TestCluster.test(
     port: port
   },
   function (cluster, t) {
+    client.setToken('popfizzlewhiz')
     parallel(delTests, function (err, res) {
       t.error(err, 'no errors in del tests')
       Object.keys(res).forEach(function (key) {
@@ -98,6 +113,11 @@ TestCluster.test(
           res[key].url,
           delExpected[key].url,
           `${key} requests correct URL`
+        )
+        t.equal(
+          res[key].headers.authorization,
+          'Token popfizzlewhiz',
+          `${key} token submitted in header`
         )
       })
       t.end()
