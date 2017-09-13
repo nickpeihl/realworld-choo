@@ -226,7 +226,7 @@ var postExpected = {
     url: '/api/users/login',
     body: {
       user: {
-        email: 'foo',
+        email: 'foo@example.com',
         password: 'bar'
       }
     }
@@ -274,7 +274,7 @@ var postTests = {
   'login-good': function (cb) {
     client.login(
       {
-        user: 'foo',
+        email: 'foo@example.com',
         password: 'bar'
       },
       cb

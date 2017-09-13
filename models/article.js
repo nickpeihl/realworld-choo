@@ -1,10 +1,7 @@
-var xhr = require('xhr')
-
-var API_BASE = require('../api').base
-
 module.exports = ArticleModel
 
 function ArticleModel (state, emitter) {
+  var client = state.client
   state.article = null
 
   emitter.on('DOMContentLoaded', function () {
@@ -12,14 +9,10 @@ function ArticleModel (state, emitter) {
   })
 
   function getArticle (slug) {
-    xhr.get(API_BASE + '/articles/' + slug, function (err, res) {
+    client.getArticle(slug, function (err, res) {
       if (err) emitter.emit('log:error', 'Error fetching article: `err`')
-      else if (res.statusCode !== 200) {
-        emitter.emit('log:error', `Article API returned ${res.statusCode}`)
-      } else {
-        state.article = JSON.parse(res.body).article
-        emitter.emit('render')
-      }
+      state.article = res.article
+      emitter.emit('render')
     })
   }
 }

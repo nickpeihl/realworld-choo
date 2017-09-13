@@ -1,15 +1,11 @@
-var xhr = require('xhr')
-
-var API_BASE = require('../api').base
-
 module.exports = AuthModel
 
 function AuthModel (state, emitter) {
+  var client = state.client
   state.auth = {
     checkingAuth: false,
     authenticated: false,
-    errors: null,
-    token: window.localStorage.getItem('jwt') || null
+    errors: null
   }
 
   emitter.on('DOMContentLoaded', function () {
@@ -20,34 +16,22 @@ function AuthModel (state, emitter) {
     state.auth.errors = []
     state.auth.checkingAuth = true
     emitter.emit('render')
-    var url = API_BASE + '/users/login'
-    xhr.post(
-      url,
-      {
-        body: {
-          user: payload
-        },
-        json: true
-      },
-      function (err, res) {
-        state.auth.checkingAuth = false
-        if (err) {
-          state.authenticated = false
-          emitter.emit('log:error', 'Error logging in: `err`')
-        } else if (res.statusCode === 422) {
-          state.auth.errors = res.body.errors
-          state.authenticated = false
-          emitter.emit('log:error', 'Unauthorized')
-          emitter.emit('render')
-        } else if (res.statusCode !== 200) {
-          state.authenticated = false
-          emitter.emit('log:error', `Login API returned ${res.statusCode}`)
-        } else {
-          state.auth.authenticated = true
-          window.localStorage.setItem('jwt', res.body.user.token)
-          emitter.emit('pushState', '/')
-        }
+    client.login(payload, function (err, res) {
+      state.auth.checkingAuth = false
+      if (err) {
+        state.authenticated = false
+        emitter.emit('log:error', 'Error logging in: `err`')
+      } else if (res.errors) {
+        state.auth.errors = res.errors
+        state.authenticated = false
+        emitter.emit('log:error', 'Unauthorized')
+        emitter.emit('render')
+      } else {
+        state.auth.authenticated = true
+        window.localStorage.setItem('jwt', res.user.token)
+        state.client.setToken(res.user.token)
+        emitter.emit('pushState', '/')
       }
-    )
+    })
   }
 }

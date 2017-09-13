@@ -79,12 +79,12 @@ RealWorld.prototype.login = function (opts, cb) {
     cb = opts
     opts = {}
   }
-  if (opts.user && opts.password) {
+  if (opts.email && opts.password) {
     this._postRequest(
       `/users/login`,
       {
         user: {
-          email: opts.user,
+          email: opts.email,
           password: opts.password
         }
       },

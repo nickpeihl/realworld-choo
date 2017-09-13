@@ -1,5 +1,4 @@
 var xtend = require('xtend')
-var querystring = require('querystring')
 
 module.exports = ArticlesModel
 

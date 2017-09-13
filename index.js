@@ -10,9 +10,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.use(require('choo-service-worker')())
 
+var token = window.localStorage.getItem('jwt')
+
 app.use(function (state, emitter) {
   state.title = 'Conduit'
-  state.client = new API()
+  state.client = new API({
+    token: token
+  })
   state.banner = {
     titleClass: 'logo-font',
     title: 'conduit'
