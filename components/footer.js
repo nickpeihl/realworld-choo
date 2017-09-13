@@ -1,8 +1,15 @@
 var html = require('bel')
+var Component = require('nanocomponent')
 
-module.exports = footer
+module.exports = Footer
 
-function footer (state, emit) {
+function Footer (opts) {
+  Component.call(this)
+}
+
+Footer.prototype = Object.create(Component.prototype)
+
+Footer.prototype.createElement = function (state, emit) {
   return html`
     <footer>
       <div class="container">
@@ -13,4 +20,8 @@ function footer (state, emit) {
       </div>
     </footer>
   `
+}
+
+Footer.prototype.update = function (state, emit) {
+  return false
 }

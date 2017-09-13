@@ -1,8 +1,9 @@
 var html = require('choo/html')
 var Header = require('../components/header')
-var footer = require('../components/footer')
+var Footer = require('../components/footer')
 
 var header = new Header()
+var footer = new Footer()
 
 module.exports = layout
 
@@ -12,7 +13,7 @@ function layout (page) {
       <body class="sans-serif">
         ${header.render(state.navs, emit)}
         ${page(state, emit)}
-        ${footer(state, emit)}
+        ${footer.render(state, emit)}
       </body>
     `
   }
