@@ -7,6 +7,8 @@ function ArticlesModel (state, emitter) {
   state.articles = xtend(
     {
       values: [],
+      count: 0,
+      currentPage: 0,
       ready: false
     },
     state.articles
@@ -16,10 +18,11 @@ function ArticlesModel (state, emitter) {
 
   function getArticles (opts) {
     state.articles.ready = false
-    client.listAllArticles(function (err, res) {
+    client.listAllArticles(state.articles.currentPage, function (err, res) {
       if (err) emitter.emit('log:error', 'Error fetching articles: `err`')
       else {
         state.articles.values = res.articles
+        state.articles.count = res.articlesCount
         state.articles.ready = true
         emitter.emit('render')
       }
